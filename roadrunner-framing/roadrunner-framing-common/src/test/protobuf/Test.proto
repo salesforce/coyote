@@ -1,0 +1,11 @@
+// Generic Vault RPC Utilities
+package salesforce.coyote.roadrunner;
+
+option java_package = "com.salesforce.keystone.coyote.protobuf.generated";
+option java_outer_classname = "TestMessage";
+option java_generate_equals_and_hash = true;
+
+// Simple message that can be used for serialization/deserialization
+message Test {
+  optional bool var1 = 1 [default = true];
+}

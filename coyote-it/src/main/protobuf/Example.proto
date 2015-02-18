@@ -1,0 +1,42 @@
+import "RpcMessages.proto";
+
+package salesforce.coyote.example;
+
+option java_generic_services = true;
+option java_generate_equals_and_hash = true;
+option optimize_for = SPEED;
+
+message HelloRequest {
+  required bool value = 1 [default = true];
+}
+
+message HelloResponse{
+  required bool response = 1;
+}
+
+message ExceptionRequest{
+}
+
+message StreamRequest{
+}
+
+message StreamResponse{
+}
+
+extend salesforce.coyote.Rpc{
+  optional HelloRequest helloRequest = 200;
+  optional HelloResponse helloResponse = 201;
+  optional ExceptionRequest exceptionResponse = 202;
+  optional StreamRequest streamRequest = 203;
+  optional StreamResponse streamResponse = 204;
+}
+
+service ClientService{
+  rpc hello(HelloRequest) returns (HelloResponse);
+  // won't actually have a real response - should throw an exception
+  rpc exception(ExceptionRequest) returns (HelloResponse);
+}
+
+service StreamService{
+  rpc stream(StreamRequest) returns (StreamResponse);
+}

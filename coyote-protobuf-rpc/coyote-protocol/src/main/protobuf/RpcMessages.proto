@@ -1,0 +1,47 @@
+// Generic Vault RPC Utilities
+package salesforce.coyote;
+
+option java_package = "com.salesforce.keystone.coyote.protobuf.generated";
+option java_outer_classname = "RpcMessages";
+option java_generate_equals_and_hash = true;
+option optimize_for = SPEED;
+
+//  Rpc message type
+//    The specific RPC parameters are carried in an extension
+//
+//    messageId         - should be a unique identifier for the message (UUID)
+//    correlationId     - for replies, it should contain the messageId of the request
+//    sequenceNumber    - should be a monotonically increasing number of the message
+//                        sent on the channel
+//    method            - the name of the method the RPC should invoke, server defines
+//                        what methods are valid
+message Rpc {
+  required string messageId = 1;
+  optional string correlationId = 2;
+  optional int64 sequenceNumber = 3;
+  optional string method = 4;
+  optional string service = 5;
+  optional RemoteExceptionHolder remoteException = 6;
+    
+  extensions 100 to max;
+}
+
+// basically copied from the declaration of StackTrace
+message StackTraceEntry {
+  required string declaringClass = 1;
+  required string methodName = 2;
+  required string fileName = 3;
+  required int32  lineNumber = 4;
+}
+
+message RemoteException {
+  // assumes that all the possible exceptions are known to the client, default to an UnknownCause
+  required string classname = 1;
+  optional string message = 2;
+  repeated StackTraceEntry stack = 3;
+}
+
+message RemoteExceptionHolder {
+  // list of causes, first being top level, next being its cause, etc.
+  repeated RemoteException remoteExceptions = 1;
+}
